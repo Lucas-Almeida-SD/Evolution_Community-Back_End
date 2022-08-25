@@ -14,7 +14,7 @@ export default class UserModel {
   constructor(private firestore = getFirestore()) {}
 
   public async create(user: IUserDTO): Promise<void> {
-    const hashPassword = encryptPassword(user.email);
+    const hashPassword = encryptPassword(user.password);
 
     const docRef = doc(this.firestore, `users/${user.email}`);
     await setDoc(docRef, { ...user, password: hashPassword });
