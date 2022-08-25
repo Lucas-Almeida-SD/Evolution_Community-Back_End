@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 
-export default (email: string) => {
+export default (password: string) => {
   const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(email, salt);
+  const hash = bcrypt.hashSync(password, salt);
 
   return hash;
 };
