@@ -17,9 +17,12 @@ export default class UserService {
   }
 
   public async login(userLogin: IUserLogin): Promise<string> {
+    UserValidation.validateLogin(userLogin);
+
     const user = await this.model.getUser(userLogin.email);
 
     UserValidation.validatesUserExistence(user as IUserDTO | null, 'login');
+    UserValidation.validatePassword(userLogin.password, (user as IUserDTO).password);
 
     const token = generateToken(user as IUserDTO);
 
