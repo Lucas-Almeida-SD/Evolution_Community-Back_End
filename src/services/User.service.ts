@@ -16,16 +16,19 @@ export default class UserService {
     await this.model.create(user);
   }
 
-  public async login(userLogin: IUserLogin): Promise<string> {
+  public async login(userLogin: IUserLogin): Promise<{ user: IUserDTO, token: string }> {
     UserValidation.validateLogin(userLogin);
 
-    const user = await this.model.getUser(userLogin.email);
+    const getUser = await this.model.getUser(userLogin.email);
 
-    UserValidation.validatesUserExistence(user as IUserDTO | null, 'login');
-    UserValidation.validatePassword(userLogin.password, (user as IUserDTO).password);
+    UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'login');
 
-    const token = generateToken(user as IUserDTO);
+    const user = getUser as IUserDTO;
 
-    return token;
+    UserValidation.validatePassword(userLogin.password, user.password);
+
+    const token = generateToken(user);
+
+    return { user, token };
   }
 }
