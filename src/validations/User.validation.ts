@@ -20,7 +20,7 @@ export default abstract class UserValidation {
       district: Joi.string().required(),
       city: Joi.string().required(),
       CEP: Joi.string().min(9).max(9).required(),
-      complement: Joi.string(),
+      complement: Joi.string().allow('', null),
       plan: Joi.string().required(),
     }).validate(user);
 
@@ -40,5 +40,9 @@ export default abstract class UserValidation {
     if (!isExists(Number(year), Number(month) - 1, Number(day))) {
       throwMyErrorObject(StatusCodes.BAD_REQUEST, 'Invalid birthDate');
     }
+  }
+
+  public static validatesUserExistence(user: IUserDTO | null) {
+    if (user) throwMyErrorObject(StatusCodes.CONFLICT, 'User already exists');
   }
 }
