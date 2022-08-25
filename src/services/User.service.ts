@@ -1,4 +1,5 @@
-import { IUserDTO } from '../interfaces/User.interface';
+import generateToken from '../helpers/generateToken';
+import { IUserDTO, IUserLogin } from '../interfaces/User.interface';
 import UserModel from '../models/User.model';
 import UserValidation from '../validations/User.validation';
 
@@ -13,5 +14,13 @@ export default class UserService {
     UserValidation.validatesUserExistence(getUser as IUserDTO | null);
 
     await this.model.create(user);
+  }
+
+  public async login(userLogin: IUserLogin): Promise<string> {
+    const user = await this.model.getUser(userLogin.email);
+
+    const token = generateToken(user as IUserDTO);
+
+    return token;
   }
 }
