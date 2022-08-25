@@ -1,11 +1,13 @@
-export interface IUserDTO {
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
+export interface IUserDTO extends IUserLogin {
   fullname: string;
   phone: string;
-  email: string;
   CPF: string;
   RG: string;
   birthDate: string;
-  password: string;
   publicPlace: string;
   address: string;
   houseNumber: number;
