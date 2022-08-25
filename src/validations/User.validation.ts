@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import isExists from 'date-fns/isExists';
+import bcrypt from 'bcryptjs';
 import throwMyErrorObject from '../helpers/throwMyErrorObject';
-import { IUserDTO } from '../interfaces/User.interface';
+import { IUserDTO, IUserLogin } from '../interfaces/User.interface';
 
 export default abstract class UserValidation {
   public static validateUserCreationObject(user: IUserDTO) {
@@ -52,6 +53,23 @@ export default abstract class UserValidation {
 
     if (operation === 'login' && !user) {
       throwMyErrorObject(StatusCodes.NOT_FOUND, 'User not found');
+    }
+  }
+
+  public static validateLogin(userLogin: IUserLogin) {
+    const { error } = Joi.object({
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    }).validate(userLogin);
+
+    if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
+  }
+
+  public static validatePassword(passwordLogin: string, passwordUser: string) {
+    const validate = bcrypt.compareSync(passwordLogin, passwordUser);
+
+    if (!validate) {
+      throwMyErrorObject(StatusCodes.UNAUTHORIZED, 'Incorrect password');
     }
   }
 }
