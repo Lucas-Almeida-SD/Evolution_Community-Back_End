@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
+import isExists from 'date-fns/isExists';
 import throwMyErrorObject from '../helpers/throwMyErrorObject';
 import { IUserDTO } from '../interfaces/User.interface';
 
@@ -9,9 +10,9 @@ export default abstract class UserValidation {
       fullname: Joi.string().min(3).required(),
       phone: Joi.string().required(),
       email: Joi.string().email().required(),
-      CPF: Joi.number().min(11).max(11).required(),
-      RG: Joi.number().min(3).required(),
-      birthDate: Joi.date().required(),
+      CPF: Joi.string().min(11).max(11).required(),
+      RG: Joi.string().min(3).required(),
+      birthDate: Joi.string().required(),
       password: Joi.string().min(8).required(),
       publicPlace: Joi.string().required(),
       address: Joi.string().required(),
@@ -24,5 +25,20 @@ export default abstract class UserValidation {
     }).validate(user);
 
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
+  }
+
+  public static validateBirthDate(birthDate: string) {
+    const birthDateRegex = /\d{2}\/\d{2}\/\d{4}/;
+    const match = birthDate.match(birthDateRegex);
+
+    if (!match || match[0] !== birthDate) {
+      throwMyErrorObject(StatusCodes.BAD_REQUEST, 'Invalid birthDate format');
+    }
+
+    const [day, month, year] = birthDate.split('/');
+
+    if (!isExists(Number(year), Number(month) - 1, Number(day))) {
+      throwMyErrorObject(StatusCodes.BAD_REQUEST, 'Invalid birthDate');
+    }
   }
 }
