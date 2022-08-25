@@ -2,15 +2,16 @@ export interface IUserDTO {
   fullname: string;
   phone: string;
   email: string;
-  CPF: number;
-  RG: number;
-  birthDate: Date;
+  CPF: string;
+  RG: string;
+  birthDate: string;
   password: string;
+  publicPlace: string;
   address: string;
   houseNumber: number;
   district: string;
   city: string;
-  CEP: number;
+  CEP: string;
   complement: string;
   plan: string;
 }
