@@ -8,16 +8,13 @@ import {
   DocumentData,
 } from 'firebase/firestore';
 import { IUserDTO } from '../interfaces/User.interface';
-import encryptPassword from '../helpers/encryptPassword';
 
 export default class UserModel {
   constructor(private firestore = getFirestore()) {}
 
   public async create(user: IUserDTO): Promise<void> {
-    const hashPassword = encryptPassword(user.password);
-
     const docRef = doc(this.firestore, `users/${user.email}`);
-    await setDoc(docRef, { ...user, password: hashPassword });
+    await setDoc(docRef, user);
   }
 
   public async getUser(email: string): Promise<DocumentData | null> {
@@ -27,5 +24,10 @@ export default class UserModel {
     if (user.exists()) return user.data();
 
     return null;
+  }
+
+  public async edit(editUser: IUserDTO, userToken: UserToken): Promise<void> {
+    const docRef = doc(this.firestore, `users/${userToken.email}`);
+    await setDoc(docRef, editUser, { merge: true });
   }
 }
