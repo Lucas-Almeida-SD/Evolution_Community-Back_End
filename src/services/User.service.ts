@@ -7,6 +7,7 @@ export default class UserService {
 
   public async create(user: IUserDTO): Promise<void> {
     UserValidation.validateUserCreationObject(user);
+    UserValidation.validateBirthDate(user.birthDate);
 
     await this.model.create(user);
   }
