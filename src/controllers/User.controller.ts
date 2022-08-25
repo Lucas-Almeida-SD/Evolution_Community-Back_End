@@ -16,8 +16,8 @@ export default class UserController {
   public login = async (req: Request, res: Response): Promise<void> => {
     const userLogin = req.body;
 
-    const token = await this.service.login(userLogin);
+    const data = await this.service.login(userLogin);
 
-    res.status(StatusCodes.OK).json({ token, error: false });
+    res.status(StatusCodes.OK).json({ data, error: false });
   };
 }
