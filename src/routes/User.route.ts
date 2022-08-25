@@ -11,5 +11,6 @@ const userService = new UserService(userModel);
 const userController = new UserController(userService);
 
 userRouter.post('/', rescue(userController.create));
+userRouter.post('/login', rescue(userController.login));
 
 export default userRouter;
