@@ -12,4 +12,12 @@ export default class UserController {
 
     res.status(StatusCodes.CREATED).json({ message: 'Created', error: false });
   };
+
+  public login = async (req: Request, res: Response): Promise<void> => {
+    const userLogin = req.body;
+
+    const token = await this.service.login(userLogin);
+
+    res.status(StatusCodes.OK).json({ token, error: false });
+  };
 }
