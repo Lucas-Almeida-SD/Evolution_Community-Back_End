@@ -42,7 +42,16 @@ export default abstract class UserValidation {
     }
   }
 
-  public static validatesUserExistence(user: IUserDTO | null) {
-    if (user) throwMyErrorObject(StatusCodes.CONFLICT, 'User already exists');
+  public static validatesUserExistence(
+    user: IUserDTO | null,
+    operation: 'create' | 'login',
+  ) {
+    if (operation === 'create' && user) {
+      throwMyErrorObject(StatusCodes.CONFLICT, 'User already exists');
+    }
+
+    if (operation === 'login' && !user) {
+      throwMyErrorObject(StatusCodes.NOT_FOUND, 'User not found');
+    }
   }
 }
