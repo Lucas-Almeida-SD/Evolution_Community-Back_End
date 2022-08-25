@@ -9,6 +9,9 @@ export default class UserService {
     UserValidation.validateUserCreationObject(user);
     UserValidation.validateBirthDate(user.birthDate);
 
+    const getUser = await this.model.getUser(user.email);
+    UserValidation.validatesUserExistence(getUser as IUserDTO | null);
+
     await this.model.create(user);
   }
 }
