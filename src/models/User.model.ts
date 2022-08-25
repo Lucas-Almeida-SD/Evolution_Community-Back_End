@@ -4,6 +4,8 @@ import {
   doc,
   setDoc,
   getFirestore,
+  getDoc,
+  DocumentData,
 } from 'firebase/firestore';
 import { IUserDTO } from '../interfaces/User.interface';
 
@@ -13,5 +15,14 @@ export default class UserModel {
   public async create(user: IUserDTO): Promise<void> {
     const docRef = doc(this.firestore, `users/${user.email}`);
     await setDoc(docRef, user);
+  }
+
+  public async getUser(email: string): Promise<DocumentData | null> {
+    const docRef = doc(this.firestore, `users/${email}`);
+    const user = await getDoc(docRef);
+
+    if (user.exists()) return user.data();
+
+    return null;
   }
 }
