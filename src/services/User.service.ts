@@ -11,13 +11,15 @@ export default class UserService {
     UserValidation.validateBirthDate(user.birthDate);
 
     const getUser = await this.model.getUser(user.email);
-    UserValidation.validatesUserExistence(getUser as IUserDTO | null);
+    UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'create');
 
     await this.model.create(user);
   }
 
   public async login(userLogin: IUserLogin): Promise<string> {
     const user = await this.model.getUser(userLogin.email);
+
+    UserValidation.validatesUserExistence(user as IUserDTO | null, 'login');
 
     const token = generateToken(user as IUserDTO);
 
