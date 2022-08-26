@@ -1,5 +1,6 @@
+import encryptPassword from '../helpers/encryptPassword';
 import generateToken from '../helpers/generateToken';
-import { IUserDTO, IUserLogin } from '../interfaces/User.interface';
+import { IUserDTO, IUserEdit, IUserLogin } from '../interfaces/User.interface';
 import UserModel from '../models/User.model';
 import UserValidation from '../validations/User.validation';
 
@@ -13,7 +14,9 @@ export default class UserService {
     const getUser = await this.model.getUser(user.email);
     UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'create');
 
-    await this.model.create(user);
+    const hashPassword = encryptPassword(user.password);
+
+    await this.model.create({ ...user, password: hashPassword });
   }
 
   public async login(userLogin: IUserLogin): Promise<{ user: IUserDTO, token: string }> {
@@ -30,5 +33,21 @@ export default class UserService {
     const token = generateToken(user);
 
     return { user, token };
+  }
+
+  public async edit(editUser: IUserEdit, userToken: UserToken): Promise<void> {
+    UserValidation.validateUserEditObject(editUser);
+
+    if (editUser.birthDate) UserValidation.validateBirthDate(editUser.birthDate);
+
+    const getUser = await this.model.getUser(userToken.email);
+    UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'edit');
+
+    const newEditUser = editUser;
+    if (newEditUser.password) {
+      newEditUser.password = encryptPassword(newEditUser.password);
+    }
+
+    await this.model.edit(editUser, userToken);
   }
 }
