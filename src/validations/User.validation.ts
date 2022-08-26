@@ -59,13 +59,18 @@ export default abstract class UserValidation {
 
   public static validatesUserExistence(
     user: IUserDTO | null,
-    operation: 'create' | 'login' | 'edit',
+    operation: 'create' | 'login' | 'edit' | 'remove',
   ) {
-    if (operation === 'create' && user) {
+    const createCondition = operation === 'create';
+    const loginCondition = operation === 'login';
+    const editCondition = operation === 'edit';
+    const removeCondition = operation === 'remove';
+
+    if (createCondition && user) {
       throwMyErrorObject(StatusCodes.CONFLICT, 'User already exists');
     }
 
-    if ((operation === 'login' || operation === 'edit') && !user) {
+    if ((loginCondition || editCondition || removeCondition) && !user) {
       throwMyErrorObject(StatusCodes.NOT_FOUND, 'User not found');
     }
   }
