@@ -14,5 +14,6 @@ const userController = new UserController(userService);
 userRouter.post('/', rescue(userController.create));
 userRouter.post('/login', rescue(userController.login));
 userRouter.put('/', rescue(Middlewares.authentication), rescue(userController.edit));
+userRouter.delete('/', rescue(Middlewares.authentication), rescue(userController.remove));
 
 export default userRouter;
