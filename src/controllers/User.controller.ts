@@ -29,4 +29,12 @@ export default class UserController {
 
     res.status(StatusCodes.OK).json({ message: 'Edited', error: false });
   };
+
+  public remove = async (req: Request, res: Response): Promise<void> => {
+    const userToken = req.userToken as UserToken;
+
+    await this.service.remove(userToken);
+
+    res.status(StatusCodes.NO_CONTENT).end();
+  };
 }
