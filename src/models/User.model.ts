@@ -6,6 +6,7 @@ import {
   getFirestore,
   getDoc,
   DocumentData,
+  deleteDoc,
 } from 'firebase/firestore';
 import { IUserDTO, IUserEdit } from '../interfaces/User.interface';
 
@@ -29,5 +30,10 @@ export default class UserModel {
   public async edit(editUser: IUserEdit, userToken: UserToken): Promise<void> {
     const docRef = doc(this.firestore, `users/${userToken.email}`);
     await setDoc(docRef, editUser, { merge: true });
+  }
+
+  public async remove(userToken: UserToken): Promise<void> {
+    const docRef = doc(this.firestore, `users/${userToken.email}`);
+    await deleteDoc(docRef);
   }
 }
