@@ -54,4 +54,11 @@ export default class UserService {
 
     await this.model.edit(editUser, userToken);
   }
+
+  public async remove(userToken: UserToken): Promise<void> {
+    const getUser = await this.model.getUser(userToken.email);
+    UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'remove');
+
+    await this.model.remove(userToken);
+  }
 }
