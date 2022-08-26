@@ -7,7 +7,7 @@ import {
   getDoc,
   DocumentData,
 } from 'firebase/firestore';
-import { IUserDTO } from '../interfaces/User.interface';
+import { IUserDTO, IUserEdit } from '../interfaces/User.interface';
 
 export default class UserModel {
   constructor(private firestore = getFirestore()) {}
@@ -26,7 +26,7 @@ export default class UserModel {
     return null;
   }
 
-  public async edit(editUser: IUserDTO, userToken: UserToken): Promise<void> {
+  public async edit(editUser: IUserEdit, userToken: UserToken): Promise<void> {
     const docRef = doc(this.firestore, `users/${userToken.email}`);
     await setDoc(docRef, editUser, { merge: true });
   }
