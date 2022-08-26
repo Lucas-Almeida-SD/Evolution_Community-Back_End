@@ -43,6 +43,10 @@ export default class UserService {
     const getUser = await this.model.getUser(userToken.email);
     UserValidation.validatesUserExistence(getUser as IUserDTO | null, 'edit');
 
+    if (editUser.email) {
+      UserValidation.validateEditEmail(editUser);
+    }
+
     const newEditUser = editUser;
     if (newEditUser.password) {
       newEditUser.password = encryptPassword(newEditUser.password);
