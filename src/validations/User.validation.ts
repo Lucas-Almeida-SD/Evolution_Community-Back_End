@@ -3,7 +3,7 @@ import Joi from 'joi';
 import isExists from 'date-fns/isExists';
 import bcrypt from 'bcryptjs';
 import throwMyErrorObject from '../helpers/throwMyErrorObject';
-import { IUserDTO, IUserLogin } from '../interfaces/User.interface';
+import { IUserDTO, IUserEdit, IUserLogin } from '../interfaces/User.interface';
 
 export default abstract class UserValidation {
   public static validateUserCreationObject(user: IUserDTO) {
@@ -45,13 +45,13 @@ export default abstract class UserValidation {
 
   public static validatesUserExistence(
     user: IUserDTO | null,
-    operation: 'create' | 'login',
+    operation: 'create' | 'login' | 'edit',
   ) {
     if (operation === 'create' && user) {
       throwMyErrorObject(StatusCodes.CONFLICT, 'User already exists');
     }
 
-    if (operation === 'login' && !user) {
+    if ((operation === 'login' || operation === 'edit') && !user) {
       throwMyErrorObject(StatusCodes.NOT_FOUND, 'User not found');
     }
   }
@@ -71,5 +71,27 @@ export default abstract class UserValidation {
     if (!validate) {
       throwMyErrorObject(StatusCodes.UNAUTHORIZED, 'Incorrect password');
     }
+  }
+
+  public static validateUserEditObject(editUser: IUserEdit) {
+    const { error } = Joi.object({
+      fullname: Joi.string().min(3),
+      phone: Joi.string(),
+      email: Joi.string().email(),
+      CPF: Joi.string().min(11).max(11),
+      RG: Joi.string().min(3),
+      birthDate: Joi.string(),
+      password: Joi.string().min(8),
+      publicPlace: Joi.string(),
+      address: Joi.string(),
+      houseNumber: Joi.number().min(1),
+      district: Joi.string(),
+      city: Joi.string(),
+      CEP: Joi.string().min(9).max(9),
+      complement: Joi.string().allow('', null),
+      plan: Joi.string(),
+    }).validate(editUser);
+
+    if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
   }
 }
