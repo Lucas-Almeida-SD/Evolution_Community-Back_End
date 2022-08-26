@@ -11,8 +11,8 @@ export default abstract class UserValidation {
       fullname: Joi.string().min(3).required(),
       phone: Joi.string().required(),
       email: Joi.string().email().required(),
-      CPF: Joi.string().min(11).max(11).required(),
-      RG: Joi.string().min(3).required(),
+      CPF: Joi.number().integer().required(),
+      RG: Joi.number().integer().required(),
       birthDate: Joi.string().required(),
       password: Joi.string().min(8).required(),
       publicPlace: Joi.string().required(),
@@ -20,12 +20,26 @@ export default abstract class UserValidation {
       houseNumber: Joi.number().min(1).required(),
       district: Joi.string().required(),
       city: Joi.string().required(),
-      CEP: Joi.string().min(9).max(9).required(),
+      CEP: Joi.number().integer().required(),
       complement: Joi.string().allow('', null),
       plan: Joi.string().required(),
     }).validate(user);
 
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
+    UserValidation.validateCPF(user.CPF);
+    UserValidation.validateCEP(user.CEP);
+  }
+
+  private static validateCPF(CPF: number) {
+    if (String(CPF).length !== 11) {
+      throwMyErrorObject(StatusCodes.BAD_REQUEST, '"CPF" length must be 11 characters');
+    }
+  }
+
+  private static validateCEP(CEP: number) {
+    if (String(CEP).length !== 8) {
+      throwMyErrorObject(StatusCodes.BAD_REQUEST, '"CEP" length must be 8 characters');
+    }
   }
 
   public static validateBirthDate(birthDate: string) {
@@ -78,8 +92,8 @@ export default abstract class UserValidation {
       fullname: Joi.string().min(3),
       phone: Joi.string(),
       email: Joi.string().email(),
-      CPF: Joi.string().min(11).max(11),
-      RG: Joi.string().min(3),
+      CPF: Joi.number().integer(),
+      RG: Joi.number().integer(),
       birthDate: Joi.string(),
       password: Joi.string().min(8),
       publicPlace: Joi.string(),
@@ -87,11 +101,13 @@ export default abstract class UserValidation {
       houseNumber: Joi.number().min(1),
       district: Joi.string(),
       city: Joi.string(),
-      CEP: Joi.string().min(9).max(9),
+      CEP: Joi.number().integer(),
       complement: Joi.string().allow('', null),
       plan: Joi.string(),
     }).validate(editUser);
 
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
+    if (editUser.CPF) UserValidation.validateCPF(editUser.CPF);
+    if (editUser.CEP) UserValidation.validateCEP(editUser.CEP);
   }
 }
