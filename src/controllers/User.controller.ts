@@ -20,4 +20,13 @@ export default class UserController {
 
     res.status(StatusCodes.OK).json({ data, error: false });
   };
+
+  public edit = async (req: Request, res: Response): Promise<void> => {
+    const editUser = req.body;
+    const userToken = req.userToken as UserToken;
+
+    await this.service.edit(editUser, userToken);
+
+    res.status(StatusCodes.OK).json({ message: 'Edited', error: false });
+  };
 }
