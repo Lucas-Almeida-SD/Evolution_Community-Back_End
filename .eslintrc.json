@@ -20,6 +20,7 @@
                 "varsIgnorePattern": "^_"
             }
         ],
-        "max-len": ["error", 100]
+        "max-len": ["error", 100],
+        "complexity": ["error", 8]
     }
 }
