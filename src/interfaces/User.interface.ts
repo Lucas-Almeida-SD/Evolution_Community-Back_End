@@ -5,15 +5,15 @@ export interface IUserLogin {
 export interface IUserDTO extends IUserLogin {
   fullname: string;
   phone: string;
-  CPF: string;
-  RG: string;
+  CPF: number;
+  RG: number;
   birthDate: string;
   publicPlace: string;
   address: string;
   houseNumber: number;
   district: string;
   city: string;
-  CEP: string;
+  CEP: number;
   complement: string;
   plan: string;
 }
@@ -23,15 +23,15 @@ export interface IUserEdit {
   password?: string;
   fullname?: string;
   phone?: string;
-  CPF?: string;
-  RG?: string;
+  CPF?: number;
+  RG?: number;
   birthDate?: string;
   publicPlace?: string;
   address?: string;
   houseNumber?: number;
   district?: string;
   city?: string;
-  CEP?: string;
+  CEP?: number;
   complement?: string;
   plan?: string;
 }
