@@ -91,7 +91,6 @@ export default abstract class UserValidation {
     const { error } = Joi.object({
       fullname: Joi.string().min(3),
       phone: Joi.string(),
-      email: Joi.string().email(),
       CPF: Joi.number().integer(),
       RG: Joi.number().integer(),
       birthDate: Joi.string(),
@@ -109,5 +108,11 @@ export default abstract class UserValidation {
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
     if (editUser.CPF) UserValidation.validateCPF(editUser.CPF);
     if (editUser.CEP) UserValidation.validateCEP(editUser.CEP);
+  }
+
+  public static validateEditEmail(editUser: IUserEdit) {
+    if (editUser.email) {
+      throwMyErrorObject(StatusCodes.METHOD_NOT_ALLOWED, 'Impossible to change email');
+    }
   }
 }
