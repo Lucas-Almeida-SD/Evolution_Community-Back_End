@@ -9,7 +9,7 @@ export default abstract class UserValidation {
   public static validateUserCreationObject(user: IUserDTO) {
     const { error } = Joi.object({
       fullname: Joi.string().min(3).required(),
-      phone: Joi.string().required(),
+      phone: Joi.number().required(),
       email: Joi.string().email().required(),
       CPF: Joi.number().integer().required(),
       RG: Joi.number().integer().required(),
@@ -22,7 +22,7 @@ export default abstract class UserValidation {
       city: Joi.string().required(),
       CEP: Joi.number().integer().required(),
       complement: Joi.string().allow('', null),
-      plan: Joi.string().required(),
+      community: Joi.string().required(),
     }).validate(user);
 
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);
@@ -95,7 +95,7 @@ export default abstract class UserValidation {
   public static validateUserEditObject(editUser: IUserEdit) {
     const { error } = Joi.object({
       fullname: Joi.string().min(3),
-      phone: Joi.string(),
+      phone: Joi.number(),
       CPF: Joi.number().integer(),
       RG: Joi.number().integer(),
       birthDate: Joi.string(),
@@ -107,7 +107,7 @@ export default abstract class UserValidation {
       city: Joi.string(),
       CEP: Joi.number().integer(),
       complement: Joi.string().allow('', null),
-      plan: Joi.string(),
+      community: Joi.string(),
     }).validate(editUser);
 
     if (error) throwMyErrorObject(StatusCodes.BAD_REQUEST, error.message);

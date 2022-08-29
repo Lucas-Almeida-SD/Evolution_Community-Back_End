@@ -4,7 +4,7 @@ export interface IUserLogin {
 }
 export interface IUserDTO extends IUserLogin {
   fullname: string;
-  phone: string;
+  phone: number;
   CPF: number;
   RG: number;
   birthDate: string;
@@ -15,14 +15,14 @@ export interface IUserDTO extends IUserLogin {
   city: string;
   CEP: number;
   complement: string;
-  plan: string;
+  community: string;
 }
 
 export interface IUserEdit {
   email?: string;
   password?: string;
   fullname?: string;
-  phone?: string;
+  phone?: number;
   CPF?: number;
   RG?: number;
   birthDate?: string;
@@ -33,5 +33,5 @@ export interface IUserEdit {
   city?: string;
   CEP?: number;
   complement?: string;
-  plan?: string;
+  community?: string;
 }

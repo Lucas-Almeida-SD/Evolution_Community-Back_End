@@ -2,7 +2,7 @@ type UserToken = {
   email: string;
   password: string;
   fullname: string;
-  phone: string;
+  phone: number;
   CPF: number;
   RG: number;
   birthDate: string;
@@ -13,7 +13,7 @@ type UserToken = {
   city: string;
   CEP: number;
   complement: string;
-  plan: string;
+  community: string;
 };
 
 declare namespace Express {
