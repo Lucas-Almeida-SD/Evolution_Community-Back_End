@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tsc && node ./build/server.js",
     "dev": "npx ts-node-dev ./src/server.ts",
-    "test": "ts-mocha ./tests/integration/*$NAME*.test.ts --timeout 0 --exit"
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [],
   "author": "",
